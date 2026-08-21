@@ -11,46 +11,22 @@
             --accent-color: #eab308;
             --card-bg: #1e293b;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; }
         
         .main-header { text-align: center; padding: 50px 20px; background-color: #0b1120; border-bottom: 2px solid #334155; }
         .main-header h1 { color: var(--accent-color); font-size: 3.5rem; margin: 0; }
         .main-header p { font-size: 1.2rem; }
 
-        .characters-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 40px 20px; }
-        .character-card { background-color: var(--card-bg); border: 1px solid #334155; border-radius: 10px; padding: 20px; width: 250px; text-align: center; cursor: pointer; transition: transform 0.3s, border-color 0.3s; }
-        .character-card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
-        .character-card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-color); margin-bottom: 15px; }
-        .character-card h3 { color: #fff; margin: 0 0 5px 0; }
-        .character-card p { font-size: 0.9rem; margin: 0; }
-
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
-        .modal-content { background-color: var(--card-bg); width: 90%; max-width: 850px; max-height: 85vh; overflow-y: auto; padding: 40px; border-radius: 15px; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.8); transform: scale(0.9); transition: transform 0.3s ease; }
-        .close-btn { position: absolute; top: 15px; right: 25px; color: #fff; font-size: 35px; font-weight: bold; cursor: pointer; transition: color 0.3s; }
-        .close-btn:hover { color: var(--accent-color); }
-
-        .modal-header { text-align: center; margin-bottom: 30px; }
-        .modal-image { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-color); margin: 0 auto 20px; display: block; }
-        .modal-header h2 { color: var(--accent-color); font-size: 2.5rem; margin: 0; }
+        .characters-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; padding: 50px 20px; }
         
-        .tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid #334155; padding-bottom: 20px; }
-        .tab-btn { background: none; color: var(--text-color); border: 1px solid #334155; padding: 10px 25px; border-radius: 30px; cursor: pointer; transition: 0.3s; font-size: 1.05rem; }
-        .tab-btn.active { background-color: var(--accent-color); color: #000; border-color: var(--accent-color); font-weight: bold; }
+        /* Removed onclick JS and made the card a real link */
+        .character-link { text-decoration: none; color: inherit; display: block; }
         
-        .content-section { display: none; animation: fadeIn 0.4s; }
-        .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
-        
-        .smart-link { color: var(--accent-color); text-decoration: underline dotted; cursor: pointer; font-weight: bold; transition: color 0.2s;}
-        .smart-link:hover { color: #fff; }
-        
-        /* Styled sections with visual timeline/icons */
-        .bio-section { margin-bottom: 35px; padding-left: 20px; border-left: 2px dashed #475569; position: relative; }
-        .bio-section h3 { color: #fff; display: flex; align-items: center; margin-top: 0; }
-        .bio-icon { width: 24px; height: 24px; fill: var(--accent-color); margin-right: 15px; background: var(--card-bg); padding: 5px; border-radius: 50%; position: absolute; left: -19px; border: 2px solid var(--accent-color); }
-        .summary-box { background-color: #0b1120; padding: 25px; border-radius: 10px; border-left: 4px solid var(--accent-color); }
-        .summary-box ul { margin: 0; padding-left: 20px; }
-        .summary-box li { margin-bottom: 15px; }
+        .character-card { background-color: var(--card-bg); border: 1px solid #334155; border-radius: 12px; padding: 25px; width: 250px; text-align: center; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .character-card:hover { transform: translateY(-8px); border-color: var(--accent-color); box-shadow: 0 12px 20px rgba(0,0,0,0.5); }
+        .character-card img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-color); margin-bottom: 15px; }
+        .character-card h3 { color: #fff; margin: 0 0 8px 0; font-size: 1.3rem;}
+        .character-card p { font-size: 0.95rem; margin: 0; color: #94a3b8; }
     </style>
 </head>
 <body>
@@ -61,155 +37,24 @@
     </div>
 
     <div class="characters-grid">
-        <div class="character-card" onclick="openModal()">
-            <img src="images/neumann.jpg" alt="John von Neumann" ...>
-            <h3>John von Neumann</h3>
-            <p>Mathematics, Economics & Computing</p>
-        </div>
+        
+        <!-- Card 1: John von Neumann (Now wrapped in a link tag) -->
+        <a href="characters/neumann.html" class="character-link">
+            <div class="character-card">
+                <img src="images/neumann.jpg" alt="John von Neumann" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%2364748b%22%3E%3Cpath d=%22M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z%22/%3E%3C/svg%3E'">
+                <h3>John von Neumann</h3>
+                <p>Mathematics, Economics & Computing</p>
+            </div>
+        </a>
+
+        <!-- Ready for future cards -->
+        <!-- 
+        <a href="characters/einstein.html" class="character-link">
+            <div class="character-card"> ... </div>
+        </a> 
+        -->
+        
     </div>
-
-    <div id="characterModal" class="modal-overlay" onclick="closeModalOutside(event)">
-        <div class="modal-content" id="modalBox">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            
-            <div class="modal-header">
-                <img src="images/neumann.jpg" class="modal-image" alt="John von Neumann" ...>
-                <h2>John von Neumann</h2>
-                <p>1903 - 1957 | The Last Great Mathematician</p>
-            </div>
-
-            <div class="tabs">
-                <button id="btn-summary" class="tab-btn active" onclick="showTab('summary')">Executive Summary</button>
-                <button id="btn-full" class="tab-btn" onclick="showTab('full')">Full Biography</button>
-            </div>
-
-            <!-- Summary Section -->
-            <div id="summary" class="content-section active">
-                <div class="summary-box">
-                    <p>John von Neumann was a Hungarian-American child prodigy and polymath who profoundly shaped multiple scientific disciplines. Despite early pressures for a "financially secure" profession, his unparalleled genius led to foundational shifts in modern society.</p>
-                    <ul>
-                        <li><strong>Economics:</strong> Co-authored "Theory of Games and Economic Behavior", laying the mathematical groundwork for strategic behavior and modern <span class="smart-link" onclick="jumpTo('economics')">econometrics</span>.</li>
-                        <li><strong>Computer Science:</strong> Outlined the <span class="smart-link" onclick="jumpTo('computing')">von Neumann Architecture</span>, the elegant design that allows today's complex computational environments and operating systems to function.</li>
-                        <li><strong>Physics & Mathematics:</strong> Provided the rigorous mathematical rules for <span class="smart-link" onclick="jumpTo('quantum')">Quantum Mechanics</span>.</li>
-                        <li><strong>Defense:</strong> Developed crucial mathematical models for the <span class="smart-link" onclick="jumpTo('defense')">Manhattan Project</span> and strategies for nuclear deterrence.</li>
-                    </ul>
-                    <p style="text-align:center; font-style:italic; margin-top: 20px; font-size:0.9rem;">Click on any highlighted topic above to dive into the detailed history.</p>
-                </div>
-            </div>
-
-            <!-- Full Biography Section -->
-            <div id="full" class="content-section">
-                
-                <div class="bio-section" id="early-life">
-                    <h3>
-                        <!-- Education Icon -->
-                        <svg class="bio-icon" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2.12-1.16V17h2V7.4L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-                        1. Early Life and Education
-                    </h3>
-                    <p>Born Neumann János Lajos on December 28, 1903, in Budapest, Hungary (then part of the Austro-Hungarian Empire), John von Neumann grew up in a wealthy, non-observant Jewish family. He was a renowned child prodigy. By the age of six, he could divide eight-digit numbers in his head and converse in Ancient Greek. By eight, he was already familiar with differential and integral calculus.</p>
-                    <p>Despite his unparalleled mathematical abilities, his father urged him to pursue a financially secure profession. As a result, von Neumann simultaneously earned a diploma in chemical engineering from the Swiss Federal Institute of Technology (ETH Zurich) in 1926, and a Ph.D. in mathematics (with minors in experimental physics and chemistry) from the University of Budapest in the same year, famously passing his exams with brilliant marks despite rarely attending classes.</p>
-                </div>
-
-                <div class="bio-section" id="economics">
-                    <h3>
-                        <!-- Chart/Economics Icon -->
-                        <svg class="bio-icon" viewBox="0 0 24 24"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM7 10h2v7H7v-7zm4-3h2v10h-2V7zm4 6h2v4h-2v-4z"/></svg>
-                        2. Foundational Contributions to Economics and Game Theory
-                    </h3>
-                    <p>In 1944, von Neumann co-authored the groundbreaking book "Theory of Games and Economic Behavior" with economist Oskar Morgenstern. This work did not merely add a theoretical footnote; it provided a rigorous mathematical framework for analyzing strategic interactions in competitive and cooperative environments.</p>
-                    <p>By shifting economic analysis away from simple individual optimization toward complex strategic behavior, von Neumann laid the foundational groundwork for modern mathematical economics. This theoretical framework heavily influenced the development of advanced quantitative modeling and time-series analysis used in modern econometrics to understand market dynamics and multi-agent interactions under uncertainty.</p>
-                </div>
-
-                <div class="bio-section" id="computing">
-                    <h3>
-                        <!-- Computer/Code Icon -->
-                        <svg class="bio-icon" viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
-                        3. Computer Science and Cybernetics
-                    </h3>
-                    <p>Often regarded as the founding father of modern computing, von Neumann wrote the "First Draft of a Report on the EDVAC" in 1945, which outlined what is now universally known as the "von Neumann Architecture."</p>
-                    <p>This architecture relies on the "stored-program" concept, where both data and instructions (programs) are kept in the same memory space. This profound yet elegant design choice is the fundamental mechanism that allows today's complex computational environments to function. It is precisely this architecture that enables modern operating systems, like Linux distributions, to seamlessly run heavy academic software and data processing scripts—ranging from automated Python extractions to advanced econometric analyses in R or Stata.</p>
-                    <p>Furthermore, von Neumann established the principles of cellular automata, paving the way for the fields of cybernetics and complex informatics.</p>
-                </div>
-
-                <div class="bio-section" id="quantum">
-                    <h3>
-                        <!-- Atom/Physics Icon -->
-                        <svg class="bio-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
-                        4. Quantum Mechanics and Pure Mathematics
-                    </h3>
-                    <p>In the late 1920s, von Neumann provided the rigorous mathematical framework for quantum mechanics. Prior to his work, quantum theory relied on mathematically incomplete concepts. He utilized what is now known as "von Neumann algebras" and the concept of Hilbert spaces to unify the theories and establish solid mathematical rules for the quantum world.</p>
-                </div>
-
-                <div class="bio-section" id="defense">
-                    <h3>
-                        <!-- Shield/Defense Icon -->
-                        <svg class="bio-icon" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-                        5. The Manhattan Project and Strategic Defense
-                    </h3>
-                    <p>During World War II, von Neumann joined the top-secret Manhattan Project to develop the atomic bomb. Drawing on his profound expertise in hydrodynamics and applied mathematics, he developed the necessary mathematical models for designing the "explosive lenses." These were used to compress the plutonium core in the implosion-type weapon, the same technology used in the bomb dropped on Nagasaki.</p>
-                    <p>During the Cold War, he became a central figure in U.S. defense policy, developing strategies for nuclear deterrence based on game theory, which eventually contributed to the doctrine of Mutually Assured Destruction (MAD).</p>
-                </div>
-
-                <div class="bio-section" id="legacy" style="border-left: none;">
-                    <h3>
-                        <!-- Star/Legacy Icon -->
-                        <svg class="bio-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        6. Final Years and Lasting Legacy
-                    </h3>
-                    <p>In 1955, von Neumann was diagnosed with bone or pancreatic cancer, widely believed to be a consequence of his exposure to radiation during nuclear bomb tests. He continued to work tirelessly even from his deathbed at Walter Reed Hospital, drafting his final, unfinished manuscript, later published as "The Computer and the Brain."</p>
-                    <p>He passed away on February 8, 1957, in Washington, D.C., at the age of 53.</p>
-                    <p>John von Neumann left behind an immeasurable legacy. The hardware we use today to process massive datasets, the theoretical models used to analyze economic behavior, and the foundational algorithms of modern computing all owe a massive debt to his extraordinary mind.</p>
-                </div>
-
-            </div>
-            
-        </div>
-    </div>
-
-    <script>
-        const modal = document.getElementById('characterModal');
-        const modalBox = document.getElementById('modalBox');
-
-        function openModal() {
-            modal.style.display = 'flex';
-            setTimeout(() => { modal.style.opacity = '1'; modalBox.style.transform = 'scale(1)'; }, 10);
-            showTab('summary');
-        }
-
-        function closeModal() {
-            modal.style.opacity = '0'; modalBox.style.transform = 'scale(0.9)';
-            setTimeout(() => { modal.style.display = 'none'; }, 300);
-        }
-
-        function closeModalOutside(event) {
-            if (event.target === modal) closeModal();
-        }
-
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
-            
-            if(tabId === 'summary') {
-                document.getElementById('btn-summary').classList.add('active');
-                document.getElementById('summary').classList.add('active');
-            } else {
-                document.getElementById('btn-full').classList.add('active');
-                document.getElementById('full').classList.add('active');
-            }
-        }
-
-        function jumpTo(sectionId) {
-            showTab('full');
-            setTimeout(() => {
-                const target = document.getElementById(sectionId);
-                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
-                target.style.transition = 'background-color 0.5s';
-                target.style.backgroundColor = 'rgba(234, 179, 8, 0.2)'; 
-                setTimeout(() => target.style.backgroundColor = 'transparent', 1500);
-            }, 100);
-        }
-    </script>
 
 </body>
 </html>
