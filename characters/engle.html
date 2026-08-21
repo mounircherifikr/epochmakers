@@ -13,15 +13,20 @@
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.6; }
         
-        /* Unified Top Navigation */
-        .navbar { background-color: rgba(11, 17, 32, 0.9); padding: 15px 30px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
-        .nav-left { display: flex; align-items: center; gap: 20px; }
-        .back-btn { background-color: var(--card-bg); color: #fff; padding: 8px 15px; border-radius: 5px; text-decoration: none; border: 1px solid #475569; display: flex; align-items: center; gap: 5px; transition: all 0.3s; font-size: 0.9rem; }
-        .back-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
-        .logo-link { font-size: 1.5rem; font-weight: bold; color: var(--accent-color); text-decoration: none; letter-spacing: 1px; }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links a { color: var(--text-color); text-decoration: none; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--accent-color); }
+        <!-- Unified Top Navigation -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="../index.html" class="back-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                Back
+            </a>
+            <a href="../index.html" class="logo-link">Epoch Makers</a>
+        </div>
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../index.html#characters-section">Characters</a>
+        </div>
+    </nav>
 
         /* Page Container */
         .container { max-width: 900px; margin: 40px auto; background-color: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
