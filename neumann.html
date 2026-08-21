@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John von Neumann | Epoch Makers</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #cbd5e1;
+            --accent-color: #eab308; /* Golden color for epoch theme */
+            --card-bg: #1e293b;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            color: var(--accent-color);
+            font-size: 3rem;
+            margin: 0 0 10px 0;
+        }
+        .header p {
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+        /* Tabs Styling */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .tab-btn {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 2px solid #334155;
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background-color: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+            font-weight: bold;
+        }
+        .tab-btn:hover {
+            border-color: var(--accent-color);
+        }
+        /* Content Sections */
+        .content-section {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s;
+        }
+        .content-section.active {
+            display: block; /* Visible when active */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Summary Links */
+        .smart-link {
+            color: var(--accent-color);
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .smart-link:hover {
+            color: #fff;
+        }
+        h2 { color: #fff; margin-top: 30px; border-left: 4px solid var(--accent-color); padding-left: 10px; }
+        h3 { color: #e2e8f0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>John von Neumann</h1>
+        <p>1903 - 1957 | Mathematics, Economics, Physics & Cybernetics</p>
+    </div>
+
+    <!-- Toggle Buttons -->
+    <div class="tabs">
+        <button id="btn-summary" class="tab-btn active" onclick="showTab('summary')">Quick Summary</button>
+        <button id="btn-full" class="tab-btn" onclick="showTab('full')">Full Biography</button>
+    </div>
+
+    <!-- Summary Section -->
+    <div id="summary" class="content-section active">
+        <h2>Executive Summary</h2>
+        <p>John von Neumann was a Hungarian-American polymath who made major contributions to a vast range of fields. He is widely considered one of the foremost mathematicians of his time.</p>
+        <ul>
+            <li><strong>Computing:</strong> Designed the fundamental architecture used in almost all modern computers, known as the <span class="smart-link" onclick="jumpTo('arch')">Von Neumann Architecture</span>.</li>
+            <li><strong>Economics:</strong> Revolutionized economic analysis by co-founding <span class="smart-link" onclick="jumpTo('game-theory')">Game Theory</span>, essential for strategic decision-making.</li>
+            <li><strong>Physics & Cybernetics:</strong> Provided the mathematical framework for quantum mechanics and contributed to early concepts bridging statistics and <span class="smart-link" onclick="jumpTo('cybernetics')">Cybernetics</span>.</li>
+        </ul>
+        <p><em>Click on any highlighted topic above to dive into the detailed history.</em></p>
+    </div>
+
+    <!-- Full Biography Section -->
+    <div id="full" class="content-section">
+        <h2>Complete Biography</h2>
+        <p>Born in Budapest, John von Neumann showed signs of genius from a very early age. By age eight, he was familiar with differential and integral calculus.</p>
+        
+        <h3 id="arch">The Von Neumann Architecture</h3>
+        <p>In 1945, von Neumann wrote a report describing a computer architecture where both data and instructions are stored in the same memory space. This concept, known as the stored-program concept, became the foundation for almost every modern computer. It drastically changed how computing machines were built, moving away from hard-wired logic circuits.</p>
+        
+        <h3 id="game-theory">Founding Game Theory</h3>
+        <p>Together with Oskar Morgenstern, he published "Theory of Games and Economic Behavior" in 1944. This groundbreaking work established Game Theory as a mathematical discipline. It models situations in which decision-makers must anticipate the reactions of their competitors, completely changing modern economics, evolutionary biology, and military strategy.</p>
+        
+        <h3 id="cybernetics">Contributions to Cybernetics & Statistics</h3>
+        <p>His deep understanding of statistics, probabilities, and automated control mechanisms closely aligned with the emerging field of Cybernetics, pioneered by Norbert Wiener. Von Neumann's theory of self-replicating automata was a profound conceptual leap, mathematically proving that machines could, theoretically, build copies of themselves, an idea rooted in complex statistical mechanics.</p>
+    </div>
+</div>
+
+<script>
+    // Function to switch between Summary and Full Biography
+    function showTab(tabId) {
+        // Remove active class from all buttons and sections
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+        
+        // Add active class to selected
+        if(tabId === 'summary') {
+            document.getElementById('btn-summary').classList.add('active');
+            document.getElementById('summary').classList.add('active');
+        } else {
+            document.getElementById('btn-full').classList.add('active');
+            document.getElementById('full').classList.add('active');
+        }
+    }
+
+    // Function to handle smart links (jump to specific section in full bio)
+    function jumpTo(sectionId) {
+        // 1. Switch to the full biography tab
+        showTab('full');
+        
+        // 2. Wait a tiny moment for the display change, then smoothly scroll to the section
+        setTimeout(() => {
+            const target = document.getElementById(sectionId);
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Optional: Highlight the section briefly to show where they landed
+            target.style.transition = 'color 0.5s';
+            target.style.color = '#eab308';
+            setTimeout(() => target.style.color = '#e2e8f0', 1500);
+        }, 100);
+    }
+</script>
+
+</body>
+</html>
