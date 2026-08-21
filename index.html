@@ -1,48 +1,268 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Epoch Makers | صُنّاع الحُقب</title>
+    <title>Epoch Makers | The Interactive Encyclopedia</title>
     <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #cbd5e1;
+            --accent-color: #eab308;
+            --card-bg: #1e293b;
+        }
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+        }
+        
+        /* Main Page Header */
+        .main-header {
             text-align: center;
+            padding: 50px 20px;
+            background-color: #0b1120;
+            border-bottom: 2px solid #334155;
         }
-        h1 {
-            font-size: 4rem;
-            margin-bottom: 10px;
-            color: #eab308; /* لون ذهبي يوحي بالفخامة والتاريخ */
+        .main-header h1 {
+            color: var(--accent-color);
+            font-size: 3.5rem;
+            margin: 0;
         }
-        p {
-            font-size: 1.5rem;
-            color: #cbd5e1;
-            max-width: 600px;
-            line-height: 1.6;
+        .main-header p {
+            font-size: 1.2rem;
         }
-        .status {
-            margin-top: 40px;
-            padding: 10px 25px;
-            border: 1px solid #eab308;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            color: #eab308;
-            letter-spacing: 1px;
+
+        /* Characters Grid (Main Page) */
+        .characters-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 40px 20px;
         }
+        .character-card {
+            background-color: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .character-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+        .character-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-color);
+            margin-bottom: 15px;
+        }
+        .character-card h3 { color: #fff; margin: 0 0 5px 0; }
+        .character-card p { font-size: 0.9rem; margin: 0; }
+
+        /* Modal (Popup Window) Background */
+        .modal-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px); /* Blur effect for the background */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Modal Content Box */
+        .modal-content {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh; /* So it doesn't exceed screen height */
+            overflow-y: auto; /* Scroll inside the window if content is long */
+            padding: 40px;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: #fff;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close-btn:hover { color: var(--accent-color); }
+
+        /* Inside Modal Styling */
+        .modal-header { text-align: center; margin-bottom: 30px; }
+        .modal-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+            margin: 0 auto 20px;
+            display: block;
+        }
+        .modal-header h2 { color: var(--accent-color); font-size: 2.5rem; margin: 0; }
+        
+        .tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+        .tab-btn {
+            background: none; color: var(--text-color);
+            border: 1px solid #334155; padding: 8px 20px;
+            border-radius: 20px; cursor: pointer; transition: 0.3s;
+        }
+        .tab-btn.active { background-color: var(--accent-color); color: #000; border-color: var(--accent-color); font-weight: bold; }
+        
+        .content-section { display: none; animation: fadeIn 0.4s; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .smart-link { color: var(--accent-color); text-decoration: underline dotted; cursor: pointer; font-weight: bold; }
+        h3.section-title { color: #fff; border-left: 3px solid var(--accent-color); padding-left: 10px; margin-top: 25px; }
     </style>
 </head>
 <body>
-    <h1>Epoch Makers</h1>
-    <p>الموسوعة التفاعلية لأعظم العقول والشخصيات التي غيرت مجرى التاريخ وساهمت في بناء حضارتنا.</p>
-    <div class="status">العمل جارٍ على بناء الموقع... انطلاقة قريبة!</div>
+
+    <!-- Main Page Header -->
+    <div class="main-header">
+        <h1>Epoch Makers</h1>
+        <p>The Interactive Encyclopedia of History & Science</p>
+    </div>
+
+    <!-- Characters Grid (Clickable Cards) -->
+    <div class="characters-grid">
+        <!-- Card 1: John von Neumann -->
+        <div class="character-card" onclick="openModal()">
+            <!-- Added Wikipedia Image for the card -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/John_von_Neumann_id_badge.png" alt="John von Neumann">
+            <h3>John von Neumann</h3>
+            <p>Mathematics & Cybernetics</p>
+        </div>
+        
+        <!-- You can add more cards here later -->
+    </div>
+
+    <!-- Modal Background (The Popup Window) -->
+    <div id="characterModal" class="modal-overlay" onclick="closeModalOutside(event)">
+        
+        <!-- Modal Content Box -->
+        <div class="modal-content" id="modalBox">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            
+            <div class="modal-header">
+                <!-- Added Image inside the Modal -->
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/John_von_Neumann_id_badge.png" class="modal-image" alt="John von Neumann">
+                <h2>John von Neumann</h2>
+                <p>1903 - 1957</p>
+            </div>
+
+            <!-- Toggle Buttons inside Modal -->
+            <div class="tabs">
+                <button id="btn-summary" class="tab-btn active" onclick="showTab('summary')">Quick Summary</button>
+                <button id="btn-full" class="tab-btn" onclick="showTab('full')">Full Biography</button>
+            </div>
+
+            <!-- Summary Section -->
+            <div id="summary" class="content-section active">
+                <h3 class="section-title">Executive Summary</h3>
+                <p>John von Neumann was a Hungarian-American polymath who made major contributions to a vast range of fields.</p>
+                <ul>
+                    <li><strong>Computing:</strong> Designed the <span class="smart-link" onclick="jumpTo('arch')">Von Neumann Architecture</span>.</li>
+                    <li><strong>Economics:</strong> Co-founded <span class="smart-link" onclick="jumpTo('game-theory')">Game Theory</span>.</li>
+                    <li><strong>Cybernetics:</strong> Contributed to early concepts bridging statistics and <span class="smart-link" onclick="jumpTo('cybernetics')">Cybernetics</span>.</li>
+                </ul>
+            </div>
+
+            <!-- Full Biography Section -->
+            <div id="full" class="content-section">
+                <h3 class="section-title" id="arch">The Von Neumann Architecture</h3>
+                <p>In 1945, von Neumann wrote a report describing a computer architecture where both data and instructions are stored in the same memory space. It became the foundation for almost every modern computer.</p>
+                
+                <h3 class="section-title" id="game-theory">Founding Game Theory</h3>
+                <p>Together with Oskar Morgenstern, he published "Theory of Games and Economic Behavior" in 1944. This work models situations in which decision-makers must anticipate the reactions of their competitors.</p>
+                
+                <h3 class="section-title" id="cybernetics">Contributions to Cybernetics</h3>
+                <p>His deep understanding of statistics and automated control mechanisms closely aligned with the emerging field of Cybernetics. His theory of self-replicating automata was a profound conceptual leap.</p>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- JavaScript to control Modal and Tabs -->
+    <script>
+        const modal = document.getElementById('characterModal');
+        const modalBox = document.getElementById('modalBox');
+
+        // Open Window
+        function openModal() {
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                modalBox.style.transform = 'scale(1)';
+            }, 10);
+            showTab('summary'); // Reset to summary when opened
+        }
+
+        // Close Window
+        function closeModal() {
+            modal.style.opacity = '0';
+            modalBox.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // Close Window if user clicks outside the box
+        function closeModalOutside(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Tab Switching Logic
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+            
+            if(tabId === 'summary') {
+                document.getElementById('btn-summary').classList.add('active');
+                document.getElementById('summary').classList.add('active');
+            } else {
+                document.getElementById('btn-full').classList.add('active');
+                document.getElementById('full').classList.add('active');
+            }
+        }
+
+        // Smart Links Logic (Jump and Scroll)
+        function jumpTo(sectionId) {
+            showTab('full');
+            setTimeout(() => {
+                const target = document.getElementById(sectionId);
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                target.style.transition = 'color 0.5s';
+                target.style.color = '#eab308';
+                setTimeout(() => target.style.color = '#fff', 1500);
+            }, 100);
+        }
+    </script>
+
 </body>
 </html>
