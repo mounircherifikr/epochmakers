@@ -3,51 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موسوعة التأثير البشري</title>
+    <title>موسوعة الأثر البشري - 1000 شخصية</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #090d16; }
+        ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
         .tab-btn.active { border-bottom-color: #f59e0b; color: #fbbf24; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); border-color: rgba(245, 158, 11, 0.4); }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col">
 
-    <!-- Navbar -->
-    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40 px-6 py-4 flex justify-between items-center">
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-3">
-            <div class="p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-                <i class="fa-solid fa-brain text-amber-500 text-lg"></i>
+            <div class="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                <i class="fa-solid fa-earth-americas text-amber-500 text-xl"></i>
             </div>
-            <h1 class="text-lg font-bold text-white">موسوعة التأثير البشري</h1>
+            <div>
+                <h1 class="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">أثر 1000 الحقيقي</h1>
+                <p class="text-xs text-slate-400">قاعدة بيانات حية مرتبطة بـ Wikidata و Wikipedia</p>
+            </div>
         </div>
-        <input type="text" id="searchInput" placeholder="ابحث باسم الشخصية..." 
-               class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-1.5 text-sm w-64 focus:outline-none focus:border-amber-500 text-slate-200">
+
+        <div class="flex items-center gap-3 w-full md:w-auto">
+            <div class="relative flex-1 md:w-80">
+                <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-500 text-sm"></i>
+                <input type="text" id="searchInput" placeholder="ابحث باسم الشخصية..." 
+                       class="w-full bg-slate-800/80 border border-slate-700/80 rounded-lg pr-9 pl-4 py-2 text-sm focus:outline-none focus:border-amber-500 text-slate-200">
+            </div>
+        </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-6 max-w-7xl mx-auto w-full">
-        <div id="figuresGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    </main>
+    <!-- Main Layout -->
+    <div class="flex min-h-[calc(100vh-73px)]">
+        
+        <!-- Sidebar Filters -->
+        <aside class="w-64 border-l border-slate-800/80 bg-slate-900/40 p-6 hidden lg:block shrink-0">
+            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">التصنيف الأكاديمي</h3>
+            <div id="categoryFilters" class="space-y-1">
+                <button class="cat-btn w-full text-right px-3 py-2 rounded text-xs text-amber-400 bg-amber-500/10 font-bold" data-cat="all">جميع الشخصيات</button>
+                <button class="cat-btn w-full text-right px-3 py-2 rounded text-xs text-slate-400 hover:bg-slate-800" data-cat="Q170790">علماء ورياضيون</button>
+                <button class="cat-btn w-full text-right px-3 py-2 rounded text-xs text-slate-400 hover:bg-slate-800" data-cat="Q82955">سياسيون وقادة</button>
+                <button class="cat-btn w-full text-right px-3 py-2 rounded text-xs text-slate-400 hover:bg-slate-800" data-cat="Q4964182">فلاسفة ومفكرون</button>
+                <button class="cat-btn w-full text-right px-3 py-2 rounded text-xs text-slate-400 hover:bg-slate-800" data-cat="Q36180">أدباء وفنانون</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Grid -->
+        <main class="flex-1 p-6 overflow-y-auto">
+            <div id="loader" class="flex flex-col items-center justify-center py-20 gap-4">
+                <div class="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                <p class="text-sm text-slate-400">جاري اتصال السيرفر بـ Wikidata لجلب 1000 شخصية وحقائقها...</p>
+            </div>
+
+            <div id="figuresGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden"></div>
+        </main>
+    </div>
 
     <!-- Modal Drawer -->
     <div id="detailModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden z-50 flex justify-end">
         <div class="w-full max-w-2xl bg-slate-900 border-r border-slate-800 h-full flex flex-col shadow-2xl relative">
-            <button id="closeModal" class="absolute top-4 left-4 bg-slate-800 text-slate-400 p-2 rounded-full hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            <button id="closeModal" class="absolute top-4 left-4 bg-slate-800 text-slate-400 p-2 rounded-full hover:text-white z-10">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
             <div class="p-6 border-b border-slate-800 bg-slate-950/40" id="modalHeader"></div>
             
-            <div class="flex border-b border-slate-800 bg-slate-950/80 px-6 gap-4 text-xs font-medium">
-                <button class="tab-btn active py-3 border-b-2 border-amber-500 text-amber-400" data-tab="tab-bio">السيرة والأحداث</button>
-                <button class="tab-btn py-3 border-b-2 border-transparent text-slate-400" data-tab="tab-ages">المراحل العمرية</button>
+            <div class="flex border-b border-slate-800 bg-slate-950/80 px-6 gap-6 text-xs font-medium">
+                <button class="tab-btn active py-3 border-b-2 border-amber-500 text-amber-400" data-tab="tab-bio">السيرة الذاتية</button>
+                <button class="tab-btn py-3 border-b-2 border-transparent text-slate-400" data-tab="tab-gallery">معرض الصور التوثيقي</button>
                 <button class="tab-btn py-3 border-b-2 border-transparent text-slate-400" data-tab="tab-awards">الجوائز والأوسمة</button>
-                <button class="tab-btn py-3 border-b-2 border-transparent text-slate-400" data-tab="tab-links">شبكة العلاقات</button>
+                <button class="tab-btn py-3 border-b-2 border-transparent text-slate-400" data-tab="tab-links">العلاقات والتأثير</button>
             </div>
 
             <div class="p-6 overflow-y-auto flex-1 space-y-4">
                 <div id="tab-bio" class="tab-content space-y-4"></div>
-                <div id="tab-ages" class="tab-content hidden space-y-4"></div>
+                <div id="tab-gallery" class="tab-content hidden space-y-4"></div>
                 <div id="tab-awards" class="tab-content hidden space-y-4"></div>
                 <div id="tab-links" class="tab-content hidden space-y-4"></div>
             </div>
@@ -55,117 +92,175 @@
     </div>
 
     <script>
-        // بيانات واقعية حقيقية مع صور من Wikimedia Commons
-        const realFigures = [
-            {
-                id: "einstein",
-                name: "ألبيرت أينشتاين",
-                title: "عالم فيزياء نظرية",
-                category: "علوم وریاضيات",
-                era: "القرن العشرين",
-                birth: "1879", death: "1955",
-                image: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg",
-                short_bio: "واضع نظرية النسبية العامة والخاصة، وأحد أهم علماء الفيزياء في التاريخ.",
-                full_bio: "عالم فيزياء ألماني السويسري السويسري الأصل، حائز على جائزة نوبل في الفيزياء عام 1921 لإسهاماته في الفيزياء النظرية وخاصة اكتشافه لظاهرة التأثير الكهروضوئي.",
-                timeline: [
-                    { year: 1905, title: "عام المعجزات", desc: "نشر 4 أوراق علمية ثورية من بينها النسبية الخاصة والظاهرة الكهروضوئية." },
-                    { year: 1915, title: "صياغة النسبية العامة", desc: "أكمل نظرية الجاذبية الحديثة التي غيرت فهمنا للكون والزمان." }
-                ],
-                age_stages: [
-                    { stage: "الشباب (1903)", age: 24, img: "https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_head.jpg" },
-                    { stage: "النضج (1921)", age: 42, img: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg" },
-                    { stage: "السن المتقدمة (1947)", age: 68, img: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Albert_Einstein_1947.jpg" }
-                ],
-                awards: [{ name: "جائزة نوبل في الفيزياء", year: 1921, desc: "عن تفسيره للتأثير الكهروضوئي." }],
-                connections: [{ target: "نيوتن", relation: "تطوير واستبدال قوانين الجاذبية الكلاسيكية" }]
-            },
-            {
-                id: "ibn_sina",
-                name: "ابن سينا (Avicenna)",
-                title: "فيلسوف وعالم طب",
-                category: "علوم وریاضيات",
-                era: "العصر الذهبي الإسلامي",
-                birth: "980", death: "1037",
-                image: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Avicenna_Portrait_on_Directory_of_Iranian_National_National_Figures.jpg",
-                short_bio: "أبو الطب الحديث ومؤلف كتاب 'القانون في الطب' الذي درس في أوروبا لقرون.",
-                full_bio: "عالم وباحث مسلم ينتمي إلى بخارى، اشتهر بالطب والفلسفة، وكتب ما يقارب 450 مؤلفاً في مواضيع مختلفة مثل الفلك، الكيمياء، الفلسفة والطب.",
-                timeline: [
-                    { year: 1025, title: "إتمام كتاب القانون في الطب", desc: "أصدر أضخم موسوعة طبية اعتمدت عليها الجامعات الأوروبية حتى القرن السابع عشر." }
-                ],
-                age_stages: [
-                    { stage: "رسم تخيلي للشيخ الرئيس", age: 50, img: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Avicenna_Portrait_on_Directory_of_Iranian_National_National_Figures.jpg" }
-                ],
-                awards: [{ name: "لقب أمير الأطباء", year: 1010, desc: "تكريماً لإسهاماته في التشريح وعلم الأدوية." }],
-                connections: [{ target: "أرسطو", relation: "شرح وتطوير الفلسفة الأرسطية" }]
-            }
-        ];
+        let allFigures = [];
+        let filteredFigures = [];
 
-        function renderCards() {
-            const grid = document.getElementById("figuresGrid");
-            grid.innerHTML = realFigures.map(f => `
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-amber-500/50 transition cursor-pointer" onclick="openModal('${f.id}')">
-                    <img src="${f.image}" class="w-full h-56 object-cover object-top rounded-lg mb-4">
-                    <h3 class="font-bold text-lg text-white mb-1">${f.name}</h3>
-                    <p class="text-xs text-amber-400 mb-2">${f.title} (${f.birth} - ${f.death})</p>
-                    <p class="text-xs text-slate-400 leading-relaxed">${f.short_bio}</p>
-                </div>
-            `).join("");
+        // SPARQL Query لجلب 1000 شخصية تاريخية موثقة بروابطها وصورها
+        async function fetch1000Figures() {
+            const sparqlQuery = `
+            SELECT ?item ?itemLabel ?image ?birth ?death ?wikiTitle WHERE {
+              VALUES ?occupation { wd:Q170790 wd:Q82955 wd:Q4964182 wd:Q36180 wd:Q1234713 }
+              ?item wdt:P106 ?occupation;
+                    wdt:P18 ?image.
+              OPTIONAL { ?item wdt:P569 ?birth. }
+              OPTIONAL { ?item wdt:P570 ?death. }
+              OPTIONAL {
+                ?sitelink schema:about ?item;
+                          schema:isPartOf <https://ar.wikipedia.org/>;
+                          schema:name ?wikiTitle.
+              }
+              SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+            } LIMIT 1000`;
+
+            const url = 'https://query.wikidata.org/sparql?query=' + encodeURIComponent(sparqlQuery);
+
+            try {
+                const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                const data = await response.json();
+                
+                allFigures = data.results.bindings.map((b, idx) => ({
+                    id: b.item.value.split('/').pop(),
+                    name: b.itemLabel ? b.itemLabel.value : "شخصية تاريخية",
+                    image: b.image ? b.image.value : "https://via.placeholder.com/300",
+                    birth: b.birth ? b.birth.value.substring(0, 4) : "?",
+                    death: b.death ? b.death.value.substring(0, 4) : "الان",
+                    wikiTitle: b.wikiTitle ? b.wikiTitle.value : null
+                }));
+
+                // إزالة التكرارات إن وجدت
+                allFigures = Array.from(new Map(allFigures.map(item => [item.id, item])).values());
+                filteredFigures = [...allFigures];
+
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('figuresGrid').classList.remove('hidden');
+                renderGrid(filteredFigures);
+            } catch (err) {
+                console.error("خطأ الاتصال بـ Wikidata:", err);
+                document.getElementById('loader').innerHTML = `<p class="text-red-400 text-xs">تعذر جلب البيانات بشكل حي. يرجى تحديث الصفحة.</p>`;
+            }
         }
 
-        function openModal(id) {
-            const fig = realFigures.find(f => f.id === id);
+        function renderGrid(data) {
+            const grid = document.getElementById('figuresGrid');
+            grid.innerHTML = data.slice(0, 100).map(f => `
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 card-hover cursor-pointer flex flex-col justify-between" onclick="openPersonModal('${f.id}')">
+                    <div>
+                        <img src="${f.image}" class="w-full h-52 object-cover object-top rounded-lg mb-3" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=No+Photo'">
+                        <h3 class="font-bold text-white text-sm mb-1">${f.name}</h3>
+                        <p class="text-xs text-amber-500 font-mono mb-2">(${f.birth} - ${f.death})</p>
+                    </div>
+                    <button class="mt-2 w-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-1.5 rounded transition">عرض التوثيق والصلات</button>
+                </div>
+            `).join('');
+        }
+
+        async function openPersonModal(id) {
+            const fig = allFigures.find(f => f.id === id);
             if (!fig) return;
 
-            document.getElementById("modalHeader").innerHTML = `
+            document.getElementById('modalHeader').innerHTML = `
                 <div class="flex items-center gap-4">
                     <img src="${fig.image}" class="w-16 h-16 rounded-full object-cover border-2 border-amber-500">
                     <div>
-                        <h2 class="text-xl font-bold text-white">${fig.name}</h2>
-                        <p class="text-xs text-amber-400">${fig.title} • ${fig.era}</p>
+                        <h2 class="text-lg font-bold text-white">${fig.name}</h2>
+                        <p class="text-xs text-amber-400 font-mono">السنوات: ${fig.birth} - ${fig.death}</p>
                     </div>
                 </div>`;
 
-            document.getElementById("tab-bio").innerHTML = `
-                <p class="text-xs text-slate-300 leading-relaxed">${fig.full_bio}</p>
-                <h4 class="text-xs font-bold text-amber-400 pt-2">اللحظات المفصلية:</h4>
-                ${fig.timeline.map(t => `<div class="bg-slate-950 p-3 rounded text-xs border border-slate-800"><span class="font-bold text-amber-500">${t.year}:</span> ${t.title} - ${t.desc}</div>`).join("")}`;
+            document.getElementById('tab-bio').innerHTML = `<div class="animate-pulse text-xs text-slate-400">جاري سحب السيرة الذاتية الرسمية من Wikipedia...</div>`;
+            document.getElementById('tab-gallery').innerHTML = `<div class="animate-pulse text-xs text-slate-400">جاري سحب الصور التوثيقية من Wikimedia Commons...</div>`;
+            document.getElementById('tab-awards').innerHTML = `<div class="animate-pulse text-xs text-slate-400">جاري جلب الأوسمة من Wikidata...</div>`;
+            document.getElementById('tab-links').innerHTML = `<div class="animate-pulse text-xs text-slate-400">جاري خريطة شبكة العلاقات...</div>`;
 
-            document.getElementById("tab-ages").innerHTML = `
-                <div class="grid grid-cols-2 gap-3">
-                    ${fig.age_stages.map(a => `
-                        <div class="bg-slate-950 p-2 rounded text-center border border-slate-800">
-                            <img src="${a.img}" class="w-full h-36 object-cover rounded mb-2">
-                            <p class="text-xs font-bold text-amber-400">${a.stage}</p>
-                        </div>
-                    `).join("")}
-                </div>`;
+            document.getElementById('detailModal').classList.remove('hidden');
 
-            document.getElementById("tab-awards").innerHTML = fig.awards.map(a => `
-                <div class="bg-slate-950 p-3 rounded border border-slate-800 text-xs">
-                    <span class="font-bold text-amber-400">${a.name} (${a.year}):</span> ${a.desc}
-                </div>`).join("");
+            // 1. جلب السيرة الذاتية من Wikipedia REST API
+            if (fig.wikiTitle) {
+                try {
+                    const wikiRes = await fetch(`https://ar.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(fig.wikiTitle)}`);
+                    const wikiData = await wikiRes.json();
+                    document.getElementById('tab-bio').innerHTML = `
+                        <p class="text-xs text-slate-300 leading-relaxed bg-slate-950 p-4 rounded-xl border border-slate-800">${wikiData.extract || 'لا توجد نبذة نصية متاحة.'}</p>
+                        <a href="${wikiData.content_urls ? wikiData.content_urls.desktop.page : '#'}" target="_blank" class="inline-block text-xs text-amber-400 hover:underline">قراءة المقال الكامل على ويكيبيديا ←</a>
+                    `;
+                } catch {
+                    document.getElementById('tab-bio').innerHTML = `<p class="text-xs text-slate-400">توفيت أو لم تتوفر لها صفحة موثقة باللغة العربية.</p>`;
+                }
+            } else {
+                document.getElementById('tab-bio').innerHTML = `<p class="text-xs text-slate-400">السيرة الذاتية غير متاحة باللغة العربية مباشرة.</p>`;
+            }
 
-            document.getElementById("tab-links").innerHTML = fig.connections.map(c => `
-                <div class="bg-slate-950 p-3 rounded border border-slate-800 text-xs flex justify-between">
-                    <span class="font-bold text-slate-200">${c.target}</span>
-                    <span class="text-amber-400">${c.relation}</span>
-                </div>`).join("");
+            // 2. جلب معرض الصور التوثيقية من Wikimedia Commons API
+            try {
+                const commonsRes = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(fig.name)}&gsrlimit=6&prop=imageinfo&iiprop=url&format=json&origin=*`);
+                const commonsData = await commonsRes.json();
+                
+                if (commonsData.query && commonsData.query.pages) {
+                    const imgs = Object.values(commonsData.query.pages).map(p => p.imageinfo[0].url);
+                    document.getElementById('tab-gallery').innerHTML = `
+                        <div class="grid grid-cols-2 gap-3">
+                            ${imgs.map(img => `<img src="${img}" class="w-full h-32 object-cover rounded-lg border border-slate-800" loading="lazy">`).join('')}
+                        </div>`;
+                } else {
+                    document.getElementById('tab-gallery').innerHTML = `<p class="text-xs text-slate-400">لا توجد صور إضافية في أرشيف Commons.</p>`;
+                }
+            } catch {
+                document.getElementById('tab-gallery').innerHTML = `<p class="text-xs text-slate-400">تعذر جلب صور المعرض.</p>`;
+            }
 
-            document.getElementById("detailModal").classList.remove("hidden");
+            // 3. جلب الجوائز والصلات المباشرة بـ SPARQL فرعي
+            fetchPersonDetailsFromWikidata(fig.id);
         }
 
-        // Tabs
-        document.querySelectorAll(".tab-btn").forEach(btn => {
-            btn.onclick = () => {
-                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active", "text-amber-400", "border-amber-500"));
-                btn.classList.add("active", "text-amber-400", "border-amber-500");
-                document.querySelectorAll(".tab-content").forEach(c => c.classList.add("hidden"));
-                document.getElementById(btn.dataset.tab).classList.remove("hidden");
+        async function fetchPersonDetailsFromWikidata(itemId) {
+            const subQuery = `
+            SELECT ?awardLabel ?influencedByLabel WHERE {
+              OPTIONAL { wd:${itemId} wdt:P166 ?award. }
+              OPTIONAL { wd:${itemId} wdt:P737 ?influencedBy. }
+              SERVICE wikibase:label { bd:serviceParam wikibase:language "ar,en". }
+            } LIMIT 20`;
+
+            try {
+                const res = await fetch('https://query.wikidata.org/sparql?query=' + encodeURIComponent(subQuery), { headers: { 'Accept': 'application/json' } });
+                const data = await res.json();
+                
+                const awards = [...new Set(data.results.bindings.map(b => b.awardLabel ? b.awardLabel.value : null).filter(Boolean))];
+                const links = [...new Set(data.results.bindings.map(b => b.influencedByLabel ? b.influencedByLabel.value : null).filter(Boolean))];
+
+                document.getElementById('tab-awards').innerHTML = awards.length ? 
+                    awards.map(a => `<div class="bg-slate-950 p-2.5 rounded border border-slate-800 text-xs text-amber-400"><i class="fa-solid fa-award ml-2"></i>${a}</div>`).join('') :
+                    `<p class="text-xs text-slate-400">لا توجد جوائز رسمية مسجلة في معرّف Wikidata.</p>`;
+
+                document.getElementById('tab-links').innerHTML = links.length ? 
+                    links.map(l => `<div class="bg-slate-950 p-2.5 rounded border border-slate-800 text-xs text-slate-200"><i class="fa-solid fa-link text-blue-400 ml-2"></i>تأثر بـ: ${l}</div>`).join('') :
+                    `<p class="text-xs text-slate-400">لا توجد شبكة تأثّر واضحة مسجلة لهذا المعرف.</p>`;
+            } catch {
+                document.getElementById('tab-awards').innerHTML = `<p class="text-xs text-slate-400">تعذر جلب الجوائز.</p>`;
+                document.getElementById('tab-links').innerHTML = `<p class="text-xs text-slate-400">تعذر جلب العلاقات.</p>`;
             }
+        }
+
+        // البحث والتصفية
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            filteredFigures = allFigures.filter(f => f.name.toLowerCase().includes(query));
+            renderGrid(filteredFigures);
         });
 
-        document.getElementById("closeModal").onclick = () => document.getElementById("detailModal").classList.add("hidden");
-        renderCards();
+        // Tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active', 'text-amber-400', 'border-amber-500'));
+                btn.classList.add('active', 'text-amber-400', 'border-amber-500');
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                document.getElementById(btn.dataset.tab).classList.remove('hidden');
+            };
+        });
+
+        document.getElementById('closeModal').onclick = () => document.getElementById('detailModal').classList.add('hidden');
+
+        // بدء التشغيل
+        fetch1000Figures();
     </script>
 </body>
 </html>
