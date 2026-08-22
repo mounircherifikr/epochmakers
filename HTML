@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موسوعة الـ 1000 شخصية الأكثر تأثيراً في التاريخ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- D3.js للرسوم الشبكية التفاعلية -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Chart.js للإحصائيات -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen">
+
+    <!-- Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-40 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                <i class="fa-solid fa-timeline text-amber-500 text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">أثر 1000</h1>
+                <p class="text-xs text-slate-400">سجل التاريخ التفاعلي وعلاقات التأثير البشري</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 w-full md:w-auto">
+            <div class="relative flex-1 md:w-80">
+                <i class="fa-solid fa-magnifying-glass absolute right-3 top-3 text-slate-500 text-sm"></i>
+                <input type="text" id="searchInput" placeholder="ابحث باسم الشخصية، الجائزة، أو الحدث التاريخي..." 
+                       class="w-full bg-slate-800/80 border border-slate-700/80 rounded-lg pr-9 pl-4 py-2 text-sm focus:outline-none focus:border-amber-500 text-slate-200 placeholder-slate-500">
+            </div>
+            <button id="viewGraphBtn" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                <i class="fa-solid fa-diagram-project text-amber-400"></i>
+                <span class="hidden sm:inline">شبكة العلاقات</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex min-h-[calc(100vh-73px)]">
+        
+        <!-- Sidebar Filters -->
+        <aside class="w-72 border-l border-slate-800/80 bg-slate-900/40 p-6 hidden lg:block shrink-0">
+            <div class="space-y-6 sticky top-24">
+                <div>
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">التصنيف الرئيسي</h3>
+                    <div id="categoryFilters" class="space-y-1"></div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">الحقبة التاريخية</h3>
+                    <div id="eraFilters" class="space-y-1"></div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">التصفية حسب الجوائز</h3>
+                    <div id="awardFilters" class="space-y-1"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="flex-1 p-6 overflow-y-auto">
+            
+            <!-- Figures Grid -->
+            <div id="figuresGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+
+            <!-- Global Graph Modal View -->
+            <div id="graphContainer" class="hidden w-full h-[80vh] bg-slate-900/60 rounded-xl border border-slate-800 relative">
+                <svg id="networkSvg" class="w-full h-full"></svg>
+            </div>
+            
+            <!-- Pagination Controls -->
+            <div class="mt-8 flex justify-between items-center border-t border-slate-800/80 pt-6" id="paginationControls">
+                <p class="text-xs text-slate-400" id="resultsCount">عرض 0 من 1000 شخصية</p>
+                <div class="flex gap-2">
+                    <button id="prevPage" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-xs border border-slate-700 disabled:opacity-50">السابق</button>
+                    <span id="pageIndicator" class="text-xs text-slate-300 self-center px-2">1 / 50</span>
+                    <button id="nextPage" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-xs border border-slate-700">التالي</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Multi-Section Modal Drawer -->
+    <div id="detailModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden z-50 flex justify-end">
+        <div class="w-full max-w-3xl bg-slate-900 border-r border-slate-800 h-full flex flex-col shadow-2xl relative">
+            
+            <!-- Close Button -->
+            <button id="closeModal" class="absolute top-5 left-5 bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white p-2 rounded-full z-10 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div class="p-8 border-b border-slate-800 bg-slate-950/40" id="modalHeader"></div>
+
+            <!-- Navigation Tabs Inside Modal -->
+            <div class="flex border-b border-slate-800 bg-slate-950/80 px-8 gap-6 text-sm">
+                <button class="tab-btn active py-3 font-medium border-b-2 border-amber-500 text-amber-400" data-tab="tab-timeline">السيرة واللحظات</button>
+                <button class="tab-btn py-3 font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200" data-tab="tab-ages">المراحل العمرية</button>
+                <button class="tab-btn py-3 font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200" data-tab="tab-awards">الأوسمة والجوائز</button>
+                <button class="tab-btn py-3 font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200" data-tab="tab-links">شبكة التأثير</button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="p-8 overflow-y-auto flex-1 space-y-6" id="modalTabBody">
+                
+                <!-- Tab 1: Biography & Key Moments Timeline -->
+                <div id="tab-timeline" class="tab-content space-y-6"></div>
+
+                <!-- Tab 2: Multi-Age Stages Photo Gallery -->
+                <div id="tab-ages" class="tab-content hidden space-y-6"></div>
+
+                <!-- Tab 3: Awards & Honors -->
+                <div id="tab-awards" class="tab-content hidden space-y-6"></div>
+
+                <!-- Tab 4: Direct Person-to-Person Connections -->
+                <div id="tab-links" class="tab-content hidden space-y-6"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
