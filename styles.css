@@ -1,0 +1,6 @@
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #020617; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+.tab-btn.active { border-color: #f59e0b; color: #fbbf24; }
+.card-hover { transition: all 0.3s ease; }
+.card-hover:hover { transform: translateY(-4px); border-color: rgba(245, 158, 11, 0.4); }
